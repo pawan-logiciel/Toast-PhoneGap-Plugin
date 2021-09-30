@@ -139,58 +139,58 @@ public class Toast extends CordovaPlugin {
 
           // On Android >= 5 you can no longer rely on the 'toast.getView().setOnTouchListener',
           // so created something funky that compares the Toast position to the tap coordinates.
-          if (IS_AT_LEAST_LOLLIPOP) {
-            getViewGroup().setOnTouchListener(new View.OnTouchListener() {
-              @Override
-              public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
-                  return false;
-                }
-                if (mostRecentToast == null || !mostRecentToast.getView().isShown()) {
-                  getViewGroup().setOnTouchListener(null);
-                  return false;
-                }
+          // if (IS_AT_LEAST_LOLLIPOP) {
+          //   getViewGroup().setOnTouchListener(new View.OnTouchListener() {
+          //     @Override
+          //     public boolean onTouch(View view, MotionEvent motionEvent) {
+          //       if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
+          //         return false;
+          //       }
+          //       if (mostRecentToast == null || !mostRecentToast.getView().isShown()) {
+          //         getViewGroup().setOnTouchListener(null);
+          //         return false;
+          //       }
 
-                float w = mostRecentToast.getView().getWidth();
-                float startX = (view.getWidth() / 2) - (w / 2);
-                float endX = (view.getWidth() / 2) + (w / 2);
+          //       float w = mostRecentToast.getView().getWidth();
+          //       float startX = (view.getWidth() / 2) - (w / 2);
+          //       float endX = (view.getWidth() / 2) + (w / 2);
 
-                float startY;
-                float endY;
+          //       float startY;
+          //       float endY;
 
-                float g = mostRecentToast.getGravity();
-                float y = mostRecentToast.getYOffset();
-                float h = mostRecentToast.getView().getHeight();
+          //       float g = mostRecentToast.getGravity();
+          //       float y = mostRecentToast.getYOffset();
+          //       float h = mostRecentToast.getView().getHeight();
 
-                if (g == GRAVITY_BOTTOM) {
-                  startY = view.getHeight() - y - h;
-                  endY = view.getHeight() - y;
-                } else if (g == GRAVITY_CENTER) {
-                  startY = (view.getHeight() / 2) + y - (h / 2);
-                  endY = (view.getHeight() / 2) + y + (h / 2);
-                } else {
-                  // top
-                  startY = y;
-                  endY = y + h;
-                }
+          //       if (g == GRAVITY_BOTTOM) {
+          //         startY = view.getHeight() - y - h;
+          //         endY = view.getHeight() - y;
+          //       } else if (g == GRAVITY_CENTER) {
+          //         startY = (view.getHeight() / 2) + y - (h / 2);
+          //         endY = (view.getHeight() / 2) + y + (h / 2);
+          //       } else {
+          //         // top
+          //         startY = y;
+          //         endY = y + h;
+          //       }
 
-                float tapX = motionEvent.getX();
-                float tapY = motionEvent.getY();
+          //       float tapX = motionEvent.getX();
+          //       float tapY = motionEvent.getY();
 
-                final boolean tapped = tapX >= startX && tapX <= endX &&
-                    tapY >= startY && tapY <= endY;
+          //       final boolean tapped = tapX >= startX && tapX <= endX &&
+          //           tapY >= startY && tapY <= endY;
 
-                return tapped && returnTapEvent("touch", msg, data, callbackContext);
-              }
-            });
-          } else {
-            toast.getView().setOnTouchListener(new View.OnTouchListener() {
-              @Override
-              public boolean onTouch(View view, MotionEvent motionEvent) {
-                return motionEvent.getAction() == MotionEvent.ACTION_DOWN && returnTapEvent("touch", msg, data, callbackContext);
-              }
-            });
-          }
+          //       return tapped && returnTapEvent("touch", msg, data, callbackContext);
+          //     }
+          //   });
+          // } else {
+          //   toast.getView().setOnTouchListener(new View.OnTouchListener() {
+          //     @Override
+          //     public boolean onTouch(View view, MotionEvent motionEvent) {
+          //       return motionEvent.getAction() == MotionEvent.ACTION_DOWN && returnTapEvent("touch", msg, data, callbackContext);
+          //     }
+          //   });
+          // }
           // trigger show every 2500 ms for as long as the requested duration
           _timer = new CountDownTimer(hideAfterMs, 2500) {
             public void onTick(long millisUntilFinished) {
